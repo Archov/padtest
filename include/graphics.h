@@ -27,4 +27,7 @@ void DrawController(int x, int y, int PadId, Controller* ctrl);
 /*As the name implies draw mouse with all it's properties*/
 void DrawMouse(int x, int y, int PadId, Controller* ctrl);
 
+/*Draw NeGcon controller with all it's properties*/
+void DrawNegcon(int x, int y, int PadId, Controller* ctrl);
+
 #endif

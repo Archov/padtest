@@ -5,6 +5,7 @@
 ## Supported controllers:
 * Digital (SCPH-1080) controller
 * DualShock analog (SCPH-1200) controller
+* Namco NeGcon controller
 * PlayStation Mouse
 
 ## Requirements:
@@ -17,8 +18,10 @@ Run "make res" to compile resources and then "make" to build the software.
 ### Usage:
 Connect a controller of your choice to either port and test it's buttons.
 
-Analog controllers should automatically switch to analog "red led mode".    
+Analog controllers should automatically switch to analog "red led mode".
 To test rumble press L3 for big motor and R3 for small motor.
+
+NeGcon controllers display digital buttons as 0/1 values and show horizontal bars with raw numerical values for twist, I, II, and L analog inputs.
 
 This software is intended to be ran on the actual PlayStation 1 or PSone console.
 Since it's using direct memory access to SIO ports it may not work on emulators or other consoles (PlayStation 2).

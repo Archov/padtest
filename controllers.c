@@ -106,7 +106,11 @@ void ReadPad(Controller* ctrl, int pad_n)
 			else
 			{
 				/*Check if controller type changed from previous reading*/
-				if(ctrl->Type != ReceivedData[1]) ctrl->ConfigState = 0;
+				if(ctrl->Type != ReceivedData[1])
+				{
+					if(ReceivedData[1] == PAD_ANALOG) ctrl->ConfigState = 0;
+					else ctrl->ConfigState = 6;
+				}
 			
 				/*Store type*/
 				ctrl->Type = ReceivedData[1];
@@ -122,6 +126,16 @@ void ReadPad(Controller* ctrl, int pad_n)
 					ctrl->LeftStickY = ReceivedData[8] - 128;
 					ctrl->RightStickX = ReceivedData[5] - 128;
 					ctrl->RightStickY = ReceivedData[6] - 128;
+				}
+
+				/*Check if this is a NeGcon controller*/
+				if(ctrl->Type == PAD_NEGCON)
+				{
+					/*Get analog twist and pressure buttons*/
+					ctrl->NegconTwist = ReceivedData[5];
+					ctrl->NegconI = ReceivedData[6];
+					ctrl->NegconII = ReceivedData[7];
+					ctrl->NegconL = ReceivedData[8];
 				}
 
 				/*Check if this is a mouse*/
@@ -159,5 +173,6 @@ void ReadPad(Controller* ctrl, int pad_n)
 			break;
 	}
 
-	if(ctrl->ConfigState < 6) ctrl->ConfigState++;
+	if(ctrl->Type == PAD_ANALOG && ctrl->ConfigState < 6) ctrl->ConfigState++;
+	if(ctrl->Type != PAD_ANALOG) ctrl->ConfigState = 6;
 }

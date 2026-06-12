@@ -146,6 +146,61 @@ void DrawMouse(int x, int y, int PadId, Controller* ctrl){
 	DrawPlus(ctrl->CursorX, ctrl->CursorY);
 }
 
+void DrawNegconDigitalValue(int x, int y, char* label, int pressed)
+{
+	char TempString[16];
+
+	sprintf(TempString, "%s:%d", label, pressed ? 1 : 0);
+	GsPrintString(x, y, 128, 128, 128, false, TempString);
+}
+
+void DrawNegconAnalogBar(int x, int y, char* label, unsigned char value)
+{
+	GsRectangle BarRect;
+	char TempString[18];
+
+	GsPrintString(x, y, 128, 128, 128, false, label);
+
+	BarRect.x = x + 44;
+	BarRect.y = y + 3;
+	BarRect.w = 42;
+	BarRect.h = 5;
+	BarRect.r = 48;
+	BarRect.g = 48;
+	BarRect.b = 48;
+	BarRect.attribute = 0;
+	GsSortRectangle(&BarRect);
+
+	BarRect.w = ((int)value * 40 / 255) + 1;
+	BarRect.r = 109;
+	BarRect.g = 193;
+	BarRect.b = 99;
+	GsSortRectangle(&BarRect);
+
+	sprintf(TempString, "%03d", (int)value);
+	GsPrintString(x + 94, y, 128, 128, 128, false, TempString);
+}
+
+void DrawNegcon(int x, int y, int PadId, Controller* ctrl){
+	unsigned short buttons = ctrl->Buttons;
+
+	/*Digital buttons*/
+	DrawNegconDigitalValue(x + 4, y + 4, "UP", buttons & PAD_UP);
+	DrawNegconDigitalValue(x + 4, y + 14, "RIGHT", buttons & PAD_RIGHT);
+	DrawNegconDigitalValue(x + 4, y + 24, "DOWN", buttons & PAD_DOWN);
+	DrawNegconDigitalValue(x + 4, y + 34, "LEFT", buttons & PAD_LEFT);
+	DrawNegconDigitalValue(x + 76, y + 4, "START", buttons & PAD_START);
+	DrawNegconDigitalValue(x + 76, y + 14, "A", buttons & PAD_CIRCLE);
+	DrawNegconDigitalValue(x + 76, y + 24, "B", buttons & PAD_TRIANGLE);
+	DrawNegconDigitalValue(x + 76, y + 34, "R", buttons & PAD_R1);
+
+	/*Analog inputs*/
+	DrawNegconAnalogBar(x + 4, y + 58, "TWIST", ctrl->NegconTwist);
+	DrawNegconAnalogBar(x + 4, y + 76, "I", ctrl->NegconI);
+	DrawNegconAnalogBar(x + 4, y + 88, "II", ctrl->NegconII);
+	DrawNegconAnalogBar(x + 4, y + 100, "L", ctrl->NegconL);
+}
+
 /*Draw controller at the specified coordinates*/
 void DrawController(int x, int y, int PadId, Controller* ctrl)
 {
@@ -177,6 +232,12 @@ void DrawController(int x, int y, int PadId, Controller* ctrl)
 			GsPrintString(x + 70 - (FontX/2), 56, 128, 128, 128, false, "Mouse");
 			DrawMouse(x, y, PadId, ctrl);
             return;
+
+		case PAD_NEGCON:
+			FontX = GetPrintedStringWidth(false, "NeGcon");
+			GsPrintString(x + 70 - (FontX/2), 56, 128, 128, 128, false, "NeGcon");
+			DrawNegcon(x, y, PadId, ctrl);
+			return;
 
 		case PAD_DIGITAL:
 			FontX = GetPrintedStringWidth(false, "Digital");

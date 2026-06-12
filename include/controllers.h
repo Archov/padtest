@@ -11,6 +11,7 @@
 /*Types of controllers*/
 #define PAD_NONE			0xFF
 #define PAD_DIGITAL         0x41
+#define PAD_NEGCON          0x23
 #define PAD_ANALOG          0x73
 #define PAD_FLIGHT			0x53
 #define PAD_MOUSE			0x12
@@ -30,6 +31,10 @@ typedef struct
 	char LeftStickY;
 	char RightStickX;
 	char RightStickY;
+	unsigned char NegconTwist;
+	unsigned char NegconI;
+	unsigned char NegconII;
+	unsigned char NegconL;
 	int CursorX;
 	int CursorY;
 }Controller;
